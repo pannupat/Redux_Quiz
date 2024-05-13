@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+//  interface ของ state  Quiz
 interface QuizState {
-  started: boolean;
-  currentQuestionIndex: number;
-  selectedAnswer: string;
-  score: number;
-  recentScores: number[];
-  quizCompleted: boolean;
+  started: boolean; // บอกว่า Quiz เริ่มยัง
+  currentQuestionIndex: number; // ตัว index คำถามปัจจุบัน
+  selectedAnswer: string; // คำตอบที่เลอืก
+  score: number; // คะแนนที่ได้
+  recentScores: number[]; //คะแนนที่ถูกเก็บลาสุด
+  quizCompleted: boolean; // บอกว่า Quiz เสร็จรึยัง
 }
 
+// ค่าเริ่มต้นของ state ของ Quiz
 const initialState: QuizState = {
   started: false,
   currentQuestionIndex: 0,
@@ -18,38 +20,33 @@ const initialState: QuizState = {
   quizCompleted: false,
 };
 
+//  slice สำหรับ Quiz ใช้ createSlice จาก ReToolkit
 const quizSlice = createSlice({
-  name: 'quiz',
-  initialState,
+  name: 'quiz', 
+  initialState, // state เริ่มต้น
   reducers: {
-    startQuiz(state) {
+    startQuiz(state) { // เริ่ม Quiz
       state.started = true;
     },
-    setCurrentQuestionIndex(state, action: PayloadAction<number>) {
+    setCurrentQuestionIndex(state, action: PayloadAction<number>) { //กำหนด index ของคำถามปัจจุบัน
       state.currentQuestionIndex = action.payload;
     },
-    setSelectedAnswer(state, action: PayloadAction<string>) {
+    setSelectedAnswer(state, action: PayloadAction<string>) { //กำหนดคำตอบที่ผู้เล่นเลือก
       state.selectedAnswer = action.payload;
     },
-    increaseScore(state) {
+    increaseScore(state) { // เพิ่มคะแนน
       state.score += 1;
     },
-    saveScore(state) {
-      // เพิ่มคะแนนใหม่ลงในตำแหน่งแรกของอาร์เรย์ recentScores
-      state.recentScores = [state.score, ...state.recentScores];
-    
-      // ตรวจสอบว่า recentScores มีคะแนนเก่ามากกว่าหรือเท่ากับ 10 รายการ
-      if (state.recentScores.length > 10) {
-        // หากมีคะแนนเก่ามากกว่า 10 รายการ ให้ลบคะแนนตำแหน่งสุดท้ายออก
-        state.recentScores.pop();
+    saveScore(state) { // บันทึกคะแนน
+      state.recentScores = [state.score, ...state.recentScores]; // เอา score ไว้หน้า recentScores
+      
+      if (state.recentScores.length > 10) { // ถ้ามีรายการคะแนนมากกว่าหรือเท่ากับ 10 รายการ
+        state.recentScores.pop(); // ลบคะแนนหลังสุดออก
       }
-    
-      // เซ็ตคะแนนเป็น 0 สำหรับรอบถัดไป
-      state.score = 0;
+      
+      state.score = 0; // เซ็ตคะแนน 0 
     },
-    
-
-    setQuizCompleted(state, action: PayloadAction<boolean>) {
+    setQuizCompleted(state, action: PayloadAction<boolean>) { // Quiz เสร็จสิ้นแล้ว?
       state.quizCompleted = action.payload;
     },
   },
@@ -57,4 +54,4 @@ const quizSlice = createSlice({
 
 export const { startQuiz, setCurrentQuestionIndex, setSelectedAnswer, increaseScore, saveScore, setQuizCompleted } = quizSlice.actions;
 
-export default quizSlice.reducer;
+export default quizSlice.reducer;  

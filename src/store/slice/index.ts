@@ -1,4 +1,3 @@
-// index.tsx (ในโฟลเดอร์ slice)
 import { combineReducers } from '@reduxjs/toolkit';
 import quizReducer from './quizSlice';
 
